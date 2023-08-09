@@ -1,0 +1,205 @@
+INPUT
+STORE choice
+
+//checkChoice checks user input from 1-5
+checkChoice, LOAD choice
+	     SUBT one
+	     SKIPCOND 800
+	     JUMP addition
+
+checkChoice2, LOAD choice
+	      SUBT two
+	      SKIPCOND 800
+	      JUMP subtraction
+
+checkChoice3, LOAD choice
+	      SUBT three
+	      SKIPCOND 800
+	      JUMP multiply
+
+checkChoice4, LOAD choice
+	      SUBT four
+	      SKIPCOND 800
+	      JUMP divide
+	      JUMP BaseExp
+
+addition, INPUT
+	  STORE A
+	  INPUT
+	  STORE B
+	  ADD A
+	  OUTPUT
+	  HALT
+
+subtraction, INPUT
+	     STORE A
+	     INPUT
+	     STORE B
+	     LOAD A
+	     SUBT B
+	     OUTPUT
+	     HALT
+
+//gets multiplicand and multiplier
+multiply, INPUT
+	  STORE A
+	  INPUT
+	  STORE B
+
+//loop for repeated addition	 
+multiplication, LOAD check
+	           SUBT A
+	           SKIPCOND 000
+	           JUMP product
+	           LOAD partial
+	           ADD B
+	           STORE partial
+	           LOAD check
+	           ADD one
+	           STORE check
+	           JUMP multiplication
+
+product, LOAD zero
+	 STORE check
+	 LOAD partial
+	 OUTPUT
+	 LOAD zero
+	 STORE partial
+	 HALT
+
+//gets dividend and divisors
+divide, INPUT
+	STORE A
+	INPUT
+	STORE B
+
+//checkDivide checks if divisor is less than dividend
+checkDivide, LOAD A
+	         SUBT B
+	         STORE num
+	         SKIPCOND 800
+	         JUMP division1 
+	         JUMP division2
+
+//division1 checks if divisor is larger than dividend
+division1, LOAD num
+	    SKIPCOND 000
+	    JUMP quotient
+	    JUMP quotient1
+
+division2, LOAD A
+	    SUBT B
+	    SKIPCOND 800
+	    JUMP quotient3
+	    STORE A
+	    LOAD partial
+	    ADD one
+	    STORE partial
+	    JUMP division2
+
+//answer when divisior is equal to the dividend
+quotient, LOAD one
+	   OUTPUT
+	   LOAD zero
+	   STORE num
+	   HALT
+
+//answer when divisor is larger than dividend
+quotient1, LOAD zero
+	    OUTPUT
+	    STORE num
+	    HALT
+
+//answer when divisor is less than dividend
+//and final difference is equal to zero
+quotient3, LOAD A
+	    SUBT B
+	    SKIPCOND 400
+	    JUMP Quotient
+	    LOAD partial
+	    ADD one
+	    OUTPUT
+	    LOAD zero
+	    STORE partial
+	    STORE num
+	    HALT
+
+//answer when divisor is less than dividend
+//and final difference is negative 
+Quotient, LOAD partial
+	  OUTPUT
+	  LOAD zero
+	  STORE partial
+	  STORE num
+	  HALT
+
+//gets the base and exponent	   	  
+BaseExp, INPUT
+	 STORE A
+	 STORE partial
+	 INPUT
+	 STORE B
+	 LOAD one
+	 STORE check
+	 STORE count
+
+//for repeated multiplication of exponential operation
+power, LOAD B
+       SKIPCOND 800
+       JUMP answer(zeroExp)
+       LOAD count
+       SUBT B
+       SKIPCOND 000
+       JUMP answer
+       LOAD partial
+       STORE num
+       LOAD one
+       STORE check
+       LOAD count
+       ADD one
+       STORE count
+
+//for repeated addition of exponential operation      
+power1, LOAD check
+	SUBT A
+	SKIPCOND 000
+	JUMP power
+	LOAD partial
+	ADD num
+	STORE partial
+	LOAD check
+	ADD one
+	STORE check
+	JUMP power1
+
+//power of number when exponent is greater than zero
+answer, LOAD partial
+	OUTPUT
+	LOAD zero
+	STORE check
+	STORE count
+	STORE num
+	STORE partial
+	HALT
+
+//power of number when exponent is zero
+answer(zeroExp), LOAD one
+		 OUTPUT
+		 LOAD zero
+		 STORE check
+	         STORE count
+		 HALT
+
+choice, DEC 0
+zero, DEC 0
+one, DEC 1
+two, DEC 2
+three, DEC 3
+four, DEC 4
+check, DEC 0
+count, DEC 0
+partial, DEC 0
+num, DEC 0
+
+A, DEC 0
+B, DEC 0
